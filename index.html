@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gender Predictor 💖✨</title>
+  <style>
+    :root {
+      --lavender: #f9f5ff;
+      --light-pink: rgba(255, 182, 193, 0.6);
+      --glass-blue: rgba(173, 216, 230, 0.6);
+      --default-shadow: rgba(106, 13, 173, 0.3);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f9f5ff 0%, #e5d9f2 100%);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 1s ease;
+      backdrop-filter: saturate(180%) blur(12px);
+      position: relative;
+    }
+
+    body.female-bg {
+      background: linear-gradient(135deg, #ffe6f0 0%, #ffcce0 100%);
+    }
+
+    body.male-bg {
+      background: linear-gradient(135deg, #e0f7ff 0%, #ccf0ff 100%);
+    }
+
+    .container {
+      position: relative;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px var(--default-shadow);
+      max-width: 400px;
+      width: 100%;
+      z-index: 10;
+      text-align: center;
+      transition: box-shadow 0.4s ease;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      color: #6a0dad;
+      text-shadow: 1px 1px 6px rgba(106, 13, 173, 0.6);
+      user-select: none;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 1.1rem;
+      border: 2px solid #6a0dad;
+      border-radius: 12px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      outline: none;
+      color: #4b0082;
+      font-weight: 600;
+    }
+
+    input[type="text"]:focus {
+      border-color: #ba55d3;
+      box-shadow: 0 0 15px #ba55d3;
+      transform: scale(1.05);
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px 0;
+      font-size: 1.3rem;
+      background: linear-gradient(45deg, #ff69b4, #8a2be2, #ff69b4);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+      transition: background-position 0.5s ease, transform 0.25s ease, box-shadow 0.25s ease;
+      background-size: 200% 200%;
+      background-position: 0% 50%;
+    }
+
+    button:hover {
+      background-position: 100% 50%;
+      transform: scale(1.1);
+      box-shadow: 0 8px 30px rgba(138, 43, 226, 0.9);
+    }
+
+    #result {
+      margin-top: 30px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #4b0082;
+      min-height: 48px;
+      text-shadow: 0 0 8px #ba55d3;
+      user-select: none;
+    }
+
+    .sparkles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 1;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, #fff, transparent 70%);
+      filter: drop-shadow(0 0 5px #fff);
+      animation: sparkleAnim 2.5s ease-in-out infinite;
+      opacity: 0.85;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .sparkle:hover {
+      transform: scale(1.6);
+      box-shadow: 0 0 12px 6px #ffffff;
+    }
+
+    .sparkle.color1 { box-shadow: 0 0 7px 3px #ff69b4; }
+    .sparkle.color2 { box-shadow: 0 0 7px 3px #8a2be2; }
+    .sparkle.color3 { box-shadow: 0 0 7px 3px #ba55d3; }
+    .sparkle.color4 { box-shadow: 0 0 7px 3px #dda0dd; }
+    .sparkle.color5 { box-shadow: 0 0 7px 3px #00ffff; }
+    .sparkle.color6 { box-shadow: 0 0 7px 3px #ffb6c1; }
+
+    @keyframes sparkleAnim {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateY(-20px) scale(1.4);
+        opacity: 0.4;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+      }
+    }
+
+    /* Hearts fixed at corners */
+    .heart-corner {
+      position: fixed;
+      font-size: 2rem;
+      user-select: none;
+      pointer-events: none;
+      animation: floatHeart 3s ease-in-out infinite;
+      z-index: 1000;
+      opacity: 0.75;
+    }
+
+    .heart-top-left {
+      top: 12px;
+      left: 12px;
+      animation-delay: 0s;
+    }
+
+    .heart-top-right {
+      top: 12px;
+      right: 12px;
+      animation-delay: 1s;
+    }
+
+    .heart-bottom-left {
+      bottom: 12px;
+      left: 12px;
+      animation-delay: 2s;
+    }
+
+    .heart-bottom-right {
+      bottom: 12px;
+      right: 12px;
+      animation-delay: 3s;
+    }
+
+    @keyframes floatHeart {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.75;
+      }
+      50% {
+        transform: translateY(-8px);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sparkles" id="sparkles"></div>
+
+  <div class="container">
+    <h1>Gender Predictor 💖🦋✨</h1>
+    <input type="text" id="nameInput" placeholder="Enter a name" autocomplete="off" />
+    <button id="predictBtn">Predict Gender</button>
+    <div id="result"></div>
+  </div>
+
+  <!-- Heart emojis fixed corners -->
+  <div class="heart-corner heart-top-left">❤️</div>
+  <div class="heart-corner heart-top-right">❤️</div>
+  <div class="heart-corner heart-bottom-left">❤️</div>
+  <div class="heart-corner heart-bottom-right">❤️</div>
+
+  <script>
+    const input = document.getElementById('nameInput');
+    const btn = document.getElementById('predictBtn');
+    const resultDiv = document.getElementById('result');
+    const sparklesContainer = document.getElementById('sparkles');
+    const body = document.body;
+
+    const colors = ['color1', 'color2', 'color3', 'color4', 'color5', 'color6'];
+
+    btn.addEventListener('click', () => {
+      const name = input.value.trim();
+      if (!name) {
+        resultDiv.textContent = '⚠️ Please enter a name.';
+        body.classList.remove('female-bg', 'male-bg');
+        return;
+      }
+
+      resultDiv.textContent = '🔮 Predicting...';
+
+      fetch(`https://api.genderize.io?name=${encodeURIComponent(name)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.gender) {
+            if (data.gender === 'female') {
+              body.classList.add('female-bg');
+              body.classList.remove('male-bg');
+            } else if (data.gender === 'male') {
+              body.classList.add('male-bg');
+              body.classList.remove('female-bg');
+            } else {
+              body.classList.remove('female-bg', 'male-bg');
+            }
+
+            const emoji = data.gender === 'female' ? '👧' :
+                          data.gender === 'male' ? '👦' : '🤷‍♂️';
+
+            resultDiv.textContent =
+              `${emoji} Name: ${data.name} — Gender: ${data.gender} (probability: ${(data.probability * 100).toFixed(1)}%)`;
+          } else {
+            resultDiv.textContent = `❌ Sorry, no prediction available for "${name}".`;
+            body.classList.remove('female-bg', 'male-bg');
+          }
+        })
+        .catch(error => {
+          resultDiv.textContent = '❌ Error fetching data. Please try again later.';
+          body.classList.remove('female-bg', 'male-bg');
+          console.error(error);
+        });
+    });
+
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.classList.add(colors[Math.floor(Math.random() * colors.length)]);
+      sparkle.style.top = Math.random() * window.innerHeight + 'px';
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+      sparkle.style.transform = `scale(${Math.random() * 1.5 + 0.5})`;
+      sparklesContainer.appendChild(sparkle);
+
+      setTimeout(() => sparkle.remove(), 4000);
+    }
+
+    setInterval(createSparkle, 80);
+  </script>
+</body>
+</html>
